@@ -1,0 +1,4 @@
+Other toothpick ones
+https://oeis.org/A139250
+Hexagon. Make stop at screen limit
+Stop scale.
