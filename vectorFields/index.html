@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vector Fields</title>
+    <link rel='stylesheet' href='css/styles.css'>
+    <link rel='stylesheet' href='lib/bootstrap-4.0.0-dist/css/bootstrap.min.css'>
+</head>
+
+<body class="h-100">
+    <div class='container-fluid h-100 bg-secondary'>
+        <div class="row d-md-none">
+            <button class="btn btn-primary navbar-expand-sm" data-toggle='collapse' data-target="#options">Options</button>
+        </div>
+        <div class='row h-100'>
+            <div class="col-sm-2 col-12 collapse d-md-block" id='options'>
+                <h2>Options</h2>
+                <hr>
+                <form onSubmit='return formSubmit();'>
+                    <!-- <div class='row'>
+                            x = x * (a*sin (t) + a*cos(t) + c*y) + y * (d*sin (t) + e*cos(t) + f*x)
+                            <br>y = x * (g*sin (t) + h*cos(t) + i*y) + y * (j*sin (t) + k*cos(t) + l*x)
+                    </div> -->
+                        <div class="form-group">
+                                <label for='inpSpeed'>Speed</label>
+                                <input type='number' id='inpSpeed' value="0.01" class="form-control">
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="chkNormalize">
+                                <label class="form-check-label" for="chkNormalize">
+                                    Normalize
+                                </label>
+                            </div>
+                    <div class='row'>
+                            <div class='col-12'>
+                                    &emsp; <label >x = </label> &emsp;
+                                    <!-- <input type="range"  step="0.1" min="-5" max="5"> -->
+                            </div>
+                        <div class='row'>
+                            &emsp; <label for='inpA'>a</label> &emsp;
+                            <input type="range" id="inpA" step="0.1" min="-5" max="5">
+                            &emsp; xsin(t)
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpB'>b</label> &emsp;
+                            <input type="range" id="inpB" step="0.1" min="-5" max="5">
+                            &emsp; xcos(t)
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpC'>c</label> &emsp;
+                            <input type="range" id="inpC" step="0.1" min="-5" max="5">
+                            &emsp; x y
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpD'>d</label> &emsp;
+                            <input type="range" id="inpD" step="0.1" min="-5" max="5" value="1">
+                            &emsp; y sin(t)
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpE'>e</label> &emsp;
+                            <input type="range" id="inpE" step="0.1" min="-5" max="5">
+                            &emsp; y cos(t)
+                        </div>
+                        <!-- <div class='row'>
+                            <br>&emsp; <label for='inpF'>f</label> &emsp;
+                            <input type="range" id="inpF" step="0.1" min="-5" max="5">
+                        </div> -->
+                        <div class='col-12 border-top'>
+                                &emsp; <label >y = </label> &emsp;
+                                <!-- <input type="range"  step="0.1" min="-5" max="5"> -->
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpG'>g</label> &emsp;
+                            <input type="range" id="inpG" step="0.1" min="-5" max="5">
+                            &emsp; xsin(t)
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpH'>h</label> &emsp;
+                            <input type="range" id="inpH" step="0.1" min="-5" max="5" value="1">
+                            &emsp; xcos(t)
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpI'>i</label> &emsp;
+                            <input type="range" id="inpI" step="0.1" min="-5" max="5">
+                            &emsp; x y
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpJ'>j</label> &emsp;
+                            <input type="range" id="inpJ" step="0.1" min="-5" max="5">
+                            &emsp; y sin(t)
+                        </div>
+                        <div class='row'>
+                            <br>&emsp; <label for='inpK'>k</label> &emsp;
+                            <input type="range" id="inpK" step="0.1" min="-5" max="5">
+                            &emsp; y cos(t)
+                        </div>
+
+                        <!-- <div class='row'>
+                                <br>&emsp; <label for='inpL'>l</label> &emsp;
+                                <input type="range" id="inpL" step="0.1" min="-5" max="5">
+                            </div> -->
+                    </div>
+                </form>
+            </div>
+            <div id='canvasDiv' class="col-sm-10 col-12 h-100">
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src='lib/p5/p5.min.js'></script>
+    <script src='js/sketch.js'></script>
+</body>
+
+</html>

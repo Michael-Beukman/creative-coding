@@ -1,0 +1,45 @@
+let seconds=0, minutes=0, secAngle, minAngle;
+let prev, now;
+function drawThings(vec){
+  if (vec.mag() < 1) return;
+  line(0,0,vec.x, vec.y);
+  push();
+  translate(vec.x, vec.y);
+  const m = vec.mag();
+  vec.setMag(m * 0.7);
+  drawThings(vec.copy());
+  rotate(secAngle);
+  drawThings(vec.copy());
+  pop();
+
+}
+
+function setup() {
+  createCanvas(600, 600);
+    prev = millis();
+}
+
+function draw() {
+  now = millis();
+  // console.log((now- prev)/1000);
+  seconds += (now - prev)/1000;
+  if (seconds > 60){
+     seconds -= 60;
+    minutes++;
+  }
+  prev = now;
+  background(0);
+  stroke(255);
+  translate(width/2, height/2);
+  secAngle = seconds / 60 * TWO_PI;
+  minAngle = minutes / 60 * TWO_PI;
+  const minuteVec = p5.Vector.fromAngle(minAngle - HALF_PI);
+  const secVec = p5.Vector.fromAngle(secAngle- HALF_PI);
+  
+  minuteVec.setMag(100); secVec.setMag(70);
+  drawThings(minuteVec);
+  drawThings(secVec);
+  
+  
+  // seconds+=0.1;
+}

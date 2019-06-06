@@ -1,0 +1,146 @@
+const cDiv = document.getElementById("canvasDiv");
+class Line{
+  constructor(x, y, ex,  ey){
+    this.x = x;
+    this.y = y;
+    this.ex = ex;
+    this.ey = ey;
+    this.dx = ex - x;
+    this.dy = ey - y;
+    this.m = this.dy/this.dx;
+    this.c = this.y - this.m * this.x;
+
+    this.minX = min(x, ex);
+    this.maxX = max(x, ex);
+
+    this.minY = min(y, ey);
+    this.maxY = max(y, ey);
+  }
+
+  inX(x){
+    return x >= this.minX && x <= this.maxX;
+  }
+  inY(y){
+    return y >= this.minY && y <= this.maxY;
+  }
+
+  isInBetween(point){
+    if (this.inX(point.x) && this.inY(point.y)){
+        if (this.dx == 0){
+          return point.x == this.x;
+        }else{
+          return this.m * point.x + this.c == point.y;
+        }
+    }
+
+    return false;
+  }
+
+  getIntersectPoint(other){
+    if (this.dx == 0 && other.dx == 0){
+      if (this.x == other.x) return createVector(this.x, this.y);
+      return null;
+    }
+    if (this.dx == 0){
+      const otherY = other.m * this.x + other.c;
+      if (this.inY(otherY)){
+        return createVector(this.x, otherY);
+      }
+    }else if (other.dx == 0){
+      return other.getIntersectPoint(this);
+    }else{
+      // todo same slope
+      if (this.m == other.m){
+        if (this.c == other.c) {
+          return createVector(this.x, this.y);
+        }
+        return null;
+      }
+      const x = (other.c - this.c)/(this.m - other.m);
+      const y = this.m * x + this.c;
+      return createVector(x, y);
+    }
+    return null;
+  }
+
+  length(){
+    return sqrt(pow(this.x - this.ex, 2) + pow(this.y - this.ey, 2));
+  }
+
+  unitVec(){
+    const n = this.length();
+    return new Line(0, 0, (this.ex - this.x)/n, (this.ey - this.y)/n);
+    
+  }
+
+  angle(other){
+    const l1 = this.unitVec();
+    const l2 = other.unitVec();
+    const dot = l1.ex * l2.ex + l1.ey * l2.ey;
+    return acos(dot);
+  }
+}
+let cols = [];
+let boundaries = [];
+let points = [];
+let radii = []
+let lines = [];
+let speeds = [1, 0, 1];
+let polygonLines = [];
+let lineBetween;
+let xCoord = 0;
+function setup() {
+  let canvas = createCanvas(windowWidth, windowHeight);
+  canvas.parent(cDiv);
+  points.push(createVector(-400, -400));
+  // points.push(createVector(0, -500));
+  points.push(createVector(0, 0));
+  radii.push(0, 0, 0);
+  cols.push(color(255,0,0, 100), color(0,255,0, 100), color(0,0,255, 100))
+  polygonLines = [
+    new Line(-500, -600, 500, -600),
+    new Line(500, -600, 500, 600),
+    new Line(500, 600, 450, 600), 
+    new Line(450, 600, 450, 500),
+    new Line(450, 500, -500, 500),
+    new Line(-500, 500, -500, -600)
+  ];
+  for (let i=0; i<points.length; ++i){
+    let temp = [];
+    for (let j=0; j<points.length; ++j){
+      temp.push(null);
+    }
+    boundaries.push(temp);
+  }
+
+  lineBetween = new Line(points[0].x, points[0].y, points[1].x,points[1].y);
+  xCoord = points[0].x;
+}
+
+function calcAreaWithBoundary(lVert, lHor){
+  
+}
+
+function draw() {
+  translate(width/2, height/2);
+    background(0);
+    stroke(255, 0, 0);
+    fill(255)
+    for (let i=0; i<points.length; ++i){
+      const p = points[i];
+      fill(255, 255, 255, 100);
+      ellipse(p.x, p.y, radii[i]*2);
+      fill(0);
+      ellipse(p.x, p.y, 10);
+    }
+    for (let l of polygonLines){
+      stroke(255, 255, 255, 100);
+      line(l.x, l.y, l.ex, l.ey);
+    }
+    line(lineBetween.x, lineBetween.y, lineBetween.ex, lineBetween.ey);
+    const yCoord = lineBetween.m * xCoord + lineBetween.c;
+
+    line(-500, yCoord, xCoord, yCoord)
+    line(xCoord, -500, xCoord, yCoord)
+    xCoord += 0.5;
+}
