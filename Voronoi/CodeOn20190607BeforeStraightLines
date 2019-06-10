@@ -75,7 +75,7 @@ class Line {
   angle(other) {
     const l1 = this.unitVec();
     const l2 = other.unitVec();
-    const dot = l1.dx * l2.dx + l1.dy * l2.dy;
+    const dot = l1.ex * l2.ex + l1.ey * l2.ey;
     return acos(dot);
   }
   draw() {
@@ -93,10 +93,6 @@ let gotFinalResult = false;
 let bestPercSoFar = 0; // for region 1
 let regionWeights = [0.6, 0.4];
 let bestCircleSoFar = null;
-let percToGet = regionWeights[1] * 100;
-let bestLinesSoFar = null;
-let bestPercLines = 0;
-
 function done() {
   // todo
   return lines.length > 5;
@@ -123,7 +119,7 @@ function calculateLineCircleIntersection(line, center, radius) {
     const y2 = b - s;
     // ellipse(x, y1, 10); ellipse(x, y2, 10);
     return [createVector(x, y1), createVector(x, y2)];
-  } else {
+  } else {  
     const a = center.x,
       b = center.y;
     const m = line.m;
@@ -148,7 +144,7 @@ function calculateLineCircleIntersection(line, center, radius) {
     return [createVector(x1, y1), createVector(x2, y2)];
   }
 }
-// not needed
+
 function calculateAreaOfCircleInsidePolygon(center, radius) {
   // calculates the area enclosed by the circle inside the polygon
   let intersectLines = [];
@@ -322,17 +318,15 @@ function setup() {
   // His data
   polygonLines = [];
   const scale = 40;
-  const scaleX = (x) => (x - 10) * scale;
-  const scaleY = (y) => -(525 + y) * scale;
-  for (let i = 0; i < epy.length; ++i) {
-    polygonLines.push(
-      new Line(scaleX(spx[i]), scaleY(spy[i]), scaleX(epx[i]), scaleY(epy[i]))
-    );
+  const scaleX = (x) => (x-10) * scale;
+  const scaleY = (y) => -(525+y) * scale;
+  for (let i=0; i< epy.length; ++i){
+    polygonLines.push(new Line(scaleX(spx[i]), scaleY(spy[i]), scaleX(epx[i]), scaleY(epy[i])));
   }
 
   points = [
     createVector(scaleX(-1.3112878096187242), scaleY(-516.26127212821348)),
-    createVector(scaleX(1.4104940822682546), scaleY(-525.34343039442456))
+    createVector(scaleX(1.4104940822682546), scaleY(-525.34343039442456)),
   ];
   for (let i = 0; i < points.length; ++i) {
     let temp = [];
@@ -385,7 +379,7 @@ function findIntersectionPoints(c1, c2, r1, r2) {
 function calcDist(p1, p2) {
   return p5.Vector.sub(p1, p2).mag();
 }
-// not needed
+
 function calculateAreaBetween3PointsAndCircle(center, radius, group) {
   // first get the two points touching the circle
   let touchingPoints = [];
@@ -432,7 +426,7 @@ function calculateAreaBetween3PointsAndCircle(center, radius, group) {
 
   return areaCircleTriangle + areaTriangle - areaCircleSector;
 }
-// needed
+
 function getVerticesOnOneSideOfRect(
   circleCenter,
   yBound,
@@ -455,57 +449,12 @@ function getVerticesOnOneSideOfRect(
     const s = createVector(l.x, l.y);
     const e = createVector(l.ex, l.ey);
     for (let p of [s, e])
-      if (xFunc(p.x, xBound) && yFunc(p.y, yBound)) {
-        starts.push(p);
-      }
-  }
-  // uniques
-
-  return starts;
-}
-// not needed
-function getVerticesBetweenLines(circleCenter, line2, line1) {
-  let starts = [];
-  const less = (a, b) => a <= b;
-  const greater = (a, b) => a >= b;
-  let yFuncL1, xFuncL1, yFuncL2, xFuncL2;
-
-  if (circleCenter.x <= line1.x) xFuncL1 = less;
-  else xFuncL1 = greater;
-
-  if (circleCenter.x <= line2.x) xFuncL2 = less;
-  else xFuncL2 = greater;
-
-  if (circleCenter.y <= line1.y) yFuncL1 = less;
-  else yFuncL1 = greater;
-
-  if (circleCenter.y <= line2.y) yFuncL2 = less;
-  else yFuncL2 = greater;
-
-  // line1.inX
-
-  starts.push(createVector(line1.x, line1.y), createVector(line2.x, line2.y));
-  starts.push(
-    createVector(line1.ex, line1.ey),
-    createVector(line2.ex, line2.ey)
-  );
-
-  for (let l of polygonLines) {
-    const s = createVector(l.x, l.y);
-    const e = createVector(l.ex, l.ey);
-    for (let p of [s, e])
-      if (
-        xFuncL1(p.x, line1.x) &&
-        yFuncL1(p.y, line1.y) &&
-        xFuncL2(p.x, line2.x) &&
-        yFuncL2(p.y, line2.y)
-      )
-        starts.push(p);
+      if (xFunc(p.x, xBound) && yFunc(p.y, yBound)) starts.push(p);
   }
 
   return starts;
 }
-// polygons as verts
+
 function getPolygonsAsVerts() {
   let verts = [];
   for (let l of polygonLines) {
@@ -513,11 +462,11 @@ function getPolygonsAsVerts() {
   }
   // get uniques
   let uniques = [];
-  for (let i = 0; i < verts.length; ++i) {
+  for (let i=0; i< verts.length; ++i){
     let isIValid = true;
-    for (let j = i + 1; j < verts.length; ++j) {
-      if (calcDist(verts[i], verts[j]) < 0.001) isIValid = false;
-    }
+    for (let j=i+1; j< verts.length; ++j){
+        if (calcDist(verts[i], verts[j]) < 0.001) isIValid = false;
+    } 
     if (isIValid) uniques.push(verts[i]);
   }
   return uniques;
@@ -533,13 +482,8 @@ function orderVertices(vertices) {
   const l = new Line(0, 0, 1, 0);
   ave.div(vertices.length);
   return vertices.sort((a, b) => {
-    // const a1 = l.angle(new Line(0, 0, a.x, -a.y));
-    // const a2 = l.angle(new Line(0, 0, b.x, -b.y));
-    const a1 = atan2(b.x, -b.y),
-      a2 = atan2(a.x, -a.y);
-
-    // const a2 = atan2(-b.y, b.x),
-      // a1 = atan2(-a.y, a.x);
+    const a1 = l.angle(new Line(0, 0, a.x, a.y));
+    const a2 = l.angle(new Line(0, 0, b.x, b.y));
     if (a1 < a2) return -1;
     else if (a1 == a2) return 0;
     return 1;
@@ -556,15 +500,15 @@ function calcAreaFromVerts(vertices) {
     var subX = orderedVertices[i == orderedVertices.length - 1 ? 0 : i + 1].x;
     var subY = orderedVertices[i].y;
     // todo maybe abs
-    // total += abs(addX * addY * 0.5);
-    // total -= abs(subX * subY * 0.5);
-    total += addX * addY * 0.5;
-    total -= subX * subY * 0.5;
+    total += abs(addX * addY * 0.5);
+    total -= abs(subX * subY * 0.5);
+    // total += addX * addY * 0.5;
+    // total -= subX * subY * 0.5;
   }
 
   return Math.abs(total);
 }
-// not needed
+
 function calcCircleCenterRadiusFromPoints(p1, p2, p3) {
   const a = p1.x,
     b = p1.y,
@@ -582,17 +526,6 @@ function calcCircleCenterRadiusFromPoints(p1, p2, p3) {
   const x = C / A - (B / A) * y;
   const radius = sqrt(pow(x - a, 2) + pow(y - b, 2));
   return { radius: radius, circleCenter: createVector(x, y) };
-}
-
-function outside(verts, point){
-  let xMin = 100000, yMin = 100000, xMax = -xMin, yMax = -yMin; 
-  for (let p of verts){
-    xMin = min(xMin, p.x)
-    xMax = max(xMax, p.x)
-    yMin = min(yMin, p.y)
-    yMax = max(yMax, p.y)
-  }
-  return point.x  < xMin || point.x > xMax || point.y < yMin || point.y > yMax;
 }
 
 function doSecondPart() {
@@ -745,9 +678,7 @@ function doSecondPart() {
     // max circleY
     circleYBoundary = circleCenter.y + radius;
   }
-  fill(255, 0, 0);
-  // ellipse(line1.x, line1.y, 100);
-  // ellipse(line1.x, line1.y, 100);
+
   const boundaryX = new Line(
     circleXBoundary,
     circleYBoundary,
@@ -781,32 +712,6 @@ function doSecondPart() {
       xCollisionPoint.y
     }), (${yCollisionPoint.x}, ${yCollisionPoint.y})`
   );
-  stroke(0, 255, 0);
-  strokeWeight(3);
-  const boundaryline1 = new Line(
-    high1.x,
-    high1.y,
-    yCollisionPoint.x,
-    yCollisionPoint.y
-  );
-  const boundaryline2 = new Line(
-    high2.x,
-    high2.y,
-    xCollisionPoint.x,
-    xCollisionPoint.y
-  );
-  boundaryline1.draw();
-  boundaryline2.draw();
-  // boundaryLine3 =
-  // line(high1.x, high1.y, yCollisionPoint.x, yCollisionPoint.y);
-  // line(high2.x, high2.y, xCollisionPoint.x, xCollisionPoint.y);
-  line(
-    yCollisionPoint.x,
-    yCollisionPoint.y,
-    xCollisionPoint.x,
-    xCollisionPoint.y
-  );
-  // now
   ellipse(xCollisionPoint.x, xCollisionPoint.y, 10);
   ellipse(yCollisionPoint.x, yCollisionPoint.y, 10);
 
@@ -865,151 +770,28 @@ function doSecondPart() {
     bestCircleSoFar = { center: circleCenter, radius: radius };
   }
 
-  fill(255, 0, 0);
-  stroke(255, 0, 0);
-  // let lineVerts = getVerticesBetweenLines(circleCenter, boundaryline1, boundaryline2);
-  // fill(255,255,0);
-  // ellipse(high2.x, high2.y, 20)
-  let lineVerts = getVerticesOnOneSideOfRect(
-    circleCenter,
-    high2.x,
-    high1.y,
-    null,
-    null,
-    []
-    // [createVector(line2.x, boundaryY.y), createVector(boundaryX.x, line1.y)]
-  );
-
-  lineVerts = lineVerts.splice(1);
-  lineVerts.push(high1, high2, xCollisionPoint, yCollisionPoint);
-
-  let uniques = [];
-  for (let i = 0; i < lineVerts.length; ++i) {
-    let isIValid = true;
-    for (let j = i + 1; j < lineVerts.length; ++j) {
-      if (calcDist(lineVerts[i], lineVerts[j]) < 0.001) isIValid = false;
-    }
-    if (isIValid) uniques.push(lineVerts[i]);
-  }
-  lineVerts = uniques;
-
-  const areaBetweenLines = calcAreaFromVerts(lineVerts);
-  console.log("Area between lines: ", areaBetweenLines / mainArea);
-  lineVerts.push();
-  console.log(lineVerts);
-  for (let p of lineVerts) {
-    ellipse(p.x, p.y, 20);
-  }
-  fill(255);
-  doThirdPart({
-    lineVerts: lineVerts,
-    circle: { center: circleCenter, radius: radius }
-  });
-  // for (let p of verts) {
-  //   // ellipse(p.x, p.y, 10);
-  // }
-  // noLoop();
-}
-
-function doThirdPart({lineVerts, circle}) {
-  background(0);
-  drawPolygons();
-
-  stroke(255, 0, 0);
-  // for (let p of lineVerts) {
-  //   ellipse(p.x, p.y, 20);
-  // }
-  const mainArea = calcAreaFromVerts(getPolygonsAsVerts());
-  const p = lineVerts[2];
-  console.log("Lines ", lineVerts.length);
-  // let area = calcAreaFromVerts(lineVerts);
-  // console.log("Area", area/mainArea);
-  // for (let i=0; i< 10 ; ++i)console.log(calcAreaFromVerts(lineVerts));
-  // return;
   fill(255, 255, 0);
-  // ellipse(p.x, p.y, 200);
-  const dir = -1;
-  let bestPerc = 0;
-  let bestP = null;
-  for (let i = 0; i < 50; ++i) {
-    const oldP = p.copy();
-    // break;
-    // p.y += p.x / p.y * 5;
-    p.x += 5 * dir;
-    const temp = circle.radius * circle.radius - pow(p.x - circle.center.x, 2);
-    if (temp < 0) {
-      p.x -= 5 * dir;
-      continue;
-    }
-    if (p.y >= 0) {
-      p.y = circle.center.y + sqrt(temp);
-    } else {
-      p.y = circle.center.y - sqrt(temp);
-    }
-    // if p outside
-    if (outside(getPolygonsAsVerts(), p)){
-      
-      p.x = oldP.x; p.y = oldP.y;
-      continue;
-    }
-    // if ()
-    // ellipse(p.x, p.y, 1);
-    let a = calcAreaFromVerts(lineVerts);
-    a /= mainArea / 100; 
-    // console.log("area", a);
-    if (abs(a - percToGet) < abs(bestPerc - percToGet)) {
-      bestPerc = a;
-      bestP = p.copy();
-    }
-    // break;
+  for (let p of verts) {
+    ellipse(p.x, p.y, 50);
   }
-  lineVerts = orderVertices(lineVerts);
-  stroke(255, 255, 255);
-  fill(0, 0, 255);
-  let size = 10;
-  for (let i = 0; i < lineVerts.length; ++i) {
-    let j = (i + 1) % lineVerts.length;
-    let a = lineVerts[i],
-      b = lineVerts[j];
-
-    line(a.x, a.y, b.x, b.y);
-    ellipse(a.x, a.y, size);
-    text(size / 10, a.x, a.y);
-    size += 10;
-  }
-  if (bestP === null) return;
-  p.x = bestP.x; p.y = bestP.y;
-  if (abs(bestPerc - percToGet) < abs(bestPercLines - percToGet)) {
-    console.log("yo");
-    bestPercLines = bestPerc;
-    bestLinesSoFar = lineVerts.map(
-      l => l.copy()
-    );
-  }
-  console.log("Best ", bestPerc);
-  for (let p of points){
-    ellipse(p.x, p.y, 10);
-  }
+  // noLoop();
 }
 
 function draw() {
   translate(width / 2, height / 2);
-  if (gotFinalResult) {
-    // do straight line thing
-  }
   for (let i = 0; i < 100 && !gotFinalResult; ++i) {
     background(0);
-    try {
-      step();
-    } catch (e) {
-      console.log("err", e);
+    try{
+    step();
+    }catch(e){
+      console.log('err', e);
       goToNext();
     }
-    //todo
-    if (done()) {
-      // goToNext();
-    }
-    // break;
+      //todo
+      if (done()){
+        // goToNext();     
+      }
+      // break;
     // break;
   }
 }
@@ -1017,8 +799,6 @@ function draw() {
 function step() {
   if (done()) {
     doSecondPart();
-    // doThirdPart(lineVerts, circle);
-    // noLoop();
     goToNext();
     return;
   }
@@ -1083,26 +863,16 @@ function goToNext() {
     drawPolygons();
     for (let p of points) ellipse(p.x, p.y, 20);
     noFill();
-    if (bestCircleSoFar || bestLinesSoFar) {
-      // ellipse(
-      //   bestCircleSoFar.center.x,
-      //   bestCircleSoFar.center.y,
-      //   2 * bestCircleSoFar.radius
-      // );
-      gotFinalResult = true;
+    if (bestCircleSoFar){
+    ellipse(
+      bestCircleSoFar.center.x,
+      bestCircleSoFar.center.y,
+      2 * bestCircleSoFar.radius
+    );
+    
+    gotFinalResult = true;
     }
-    // ellipse(0, 0, 400);
     noLoop();
-
-    console.log("Final best", bestPercLines)
-    console.log(bestLinesSoFar);
-    for (let i=0;i<bestLinesSoFar.length; ++i){
-      const j = (i+1)%bestLinesSoFar.length;
-      const a = bestLinesSoFar[i];
-      const b = bestLinesSoFar[j];
-      line(a.x, a.y, b.x, b.y)
-    }
-    // now draw()
   }
 }
 
