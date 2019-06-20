@@ -1,5 +1,5 @@
 class Population {
-  constructor(numElems = 400) {
+  constructor(numElems = 100) {
     this.pop = [];
     this.numElems = numElems;
     this.init();
@@ -29,77 +29,47 @@ class Population {
   }
 
   calcAreaRatios(elem, log) {
-    let vs = elem.positions.slice();
-    vs = orderVertices(vs);
-    let areas = [];
-    for (let i = 0; i < vs.length; ++i) {
-      const j = (i + 1) % vs.length;
-      let l1 = null,
-        l2 = null;
-      for (let l of elem.lines) {
-        if (l.end.x == vs[i].x && l.end.y == vs[i].y) l1 = l;
-        if (l.end.x == vs[j].x && l.end.y == vs[j].y) l2 = l;
+    const polyLines = findPolygonLinesAroundPoints(elem.lines);
+    const verts = [];
+    const areas = [];
+    for (let group of polyLines){
+      let temp=[]
+      for (let l of group){
+        temp.push(l.start, l.end);
       }
-      if (!l1 || !l2) {
-        console.log("NOT");
-        noLoop();
-        return;
-      }
-      // yBound is one that is furthest away from point, and everythin in direction up to point. Similarly for x
-      const xBound = l2.end.x;
-      const yBound = l1.end.y;
-      // console.log(xBound, l2.end.x);
-      const less = (a, b) => a < b;
-      const greater = (a, b) => a >= b;
-      let xFunc = greater;
-      if (l1.end.x <= l2.end.x) xFunc = less;
-      let yFunc = less;
-      // console.log(xBound, l2.end.x);
-      if (l2.end.y < l1.end.y) yFunc = greater;
-      // console.log("xx", xBound, yBound, l2.end.x);
-
-      // console.log(xFunc, yFunc)
-      const polyVerts = getLineElemVerts(xBound, yBound, xFunc, yFunc);
-      // noLoop();
-      polyVerts.push(l1.end, l2.end, LEFT_MID, RIGHT_MID);
-      if (log){
-        fill(0,255,0)
-        for (let p of polyVerts){
-          ellipse(p.x,p.y, 30);
-        }
-              stroke(255,0,0);
-      line(xBound, -100, xBound, 100);
-      line(-100, yBound, 100, yBound);
-
-      l1.draw();
-      stroke(0,255,0);
-      l2.draw()
-      }
-      // throw "";
-      areas.push(calcAreaFromVerts(polyVerts));
+      verts.push(temp);
+      areas.push(calcAreaFromVerts(temp)/mainArea);
     }
+
+    if (log) console.log(areas, 'ae');
     return areas;
   }
 
   calcFitnesses() {
     const self = this;
+    let multi = 0;
     function calcSingle(elem) {
       if (!validSplit(elem.lines)) {
-        // console.log('ss')
-        return -1;
+        // console.log('ss')  
+        // return -0.4;
+        multi +=0.15;
       }
-      for (let l of elem.lines) if (outside(polygonLines, l.end)) return -1;
-      if (outside(polygonLines, elem.center)) return -1;
+      for (let l of elem.lines) 
+      if (outside(polygonLines, l.end) || outside(polygonLines, l.start)) {
+        multi +=0.06;
+        break;
+      }
+      // if (outside(polygonLines, elem.center)) return -1;
       // now calc area
       const areas = self.calcAreaRatios(elem);
       let fit = 0;
       elem.areas = [];
       for (let i in areas) {
-        const a = areas[i] / mainArea;
+        const a = areas[i];
         elem.areas.push(a);
         fit += abs(a - ratios[i]);
-      }
-      return 1 / (fit + 0.0001);
+        }
+      return 1 / (fit + 0.01) - multi;
 
       return 0.001;
     }
@@ -111,6 +81,7 @@ class Population {
 
   getBreedingPairs() {
     const notBad = this.pop.filter((e) => e.fitness >= -0.5);
+    notBad.forEach((e)=>e.fitness+=0.15);
     return notBad;
   }
 
@@ -128,6 +99,7 @@ class Population {
     const pairs = this.getBreedingPairs();
     if (pairs.length == 0) {
       this.init();
+      // console.log('p')
       return this.pos;
     }
     let arr = [];
@@ -139,28 +111,31 @@ class Population {
         maxI = i;
       }
     }
+    // console.log(pairs);
     for (let i in pairs) {
       pairs[i].fitness /= maxFit;
       //   print(pairs[i].fitness);
-      for (let j = 0; j < 100 * pairs[i].fitness; ++j) {
+      for (let j = 0; j < 10 * pairs[i].fitness; ++j) {
         arr.push(i);
       }
     }
-    // console.log(arr);
+
     //   noLoop();
     let newPop = [];
     while (newPop.length < this.pop.length) {
       const i1 = random(arr);
       const i2 = random(arr);
-      const c = this.pop[i1].breed(this.pop[i2]);
-      c.mutate(1);
+      // console.log(i1, i2)
+      // const c = this.pop[i1].breed(this.pop[i2]);
+      const c = pairs[i1].breed(pairs[i2]);
+      c.mutate(0.5);
       newPop.push(c);
     }
     // console.log(pairs[maxI].areas)
     if (this.areaComp(pairs[maxI].areas, this.best.areas))
-      this.best = pairs[maxI];
+      this.best = pairs[maxI];  
     //   newPop.push(pairs[maxI]);
-    //   console.log(pairs[maxI].area);
+      // console.log(maxI);
     // noLoop();
     return newPop;
   }

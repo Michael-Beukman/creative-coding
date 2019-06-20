@@ -40,6 +40,10 @@ class Line {
   }
 
   getIntersectPoint(other) {
+    if (calcDist(this.start, other.start) < 1) return this.start;
+    if (calcDist(this.start, other.end) < 1) return this.start;
+    if (calcDist(this.end, other.start) < 1) return this.end;
+    if (calcDist(this.end, other.end) < 1) return this.end;
     if (this.dx == 0 && other.dx == 0) {
       if (this.x == other.x) return createVector(this.x, this.y);
       return null;
@@ -100,7 +104,7 @@ let speeds = [11, 10];
 let polygonLines = [];
 let gotFinalResult = false;
 let bestPercSoFar = 0; // for region 1
-let regionWeights = [0.6, 0.4];
+let regionWeights = [0.3, 0.4, 0.3];
 let ratios = regionWeights;
 let bestCircleSoFar = null;
 let percToGet = regionWeights[1] * 100;
@@ -363,8 +367,8 @@ function setup() {
 
   points = [
     createVector(scaleX(-1.3112878096187242), scaleY(-516.26127212821348)),
-    createVector(scaleX(1.4104940822682546), scaleY(-525.34343039442456))
-    // createVector(scaleX(12.4), scaleY(-530))
+    createVector(scaleX(1.4104940822682546), scaleY(-525.34343039442456)),
+    createVector(scaleX(12.4), scaleY(-530))
   ];
   for (let i = 0; i < points.length; ++i) {
     let temp = [];
@@ -452,7 +456,7 @@ function outside(lines, point) {
   let numIntersects = 0;
   for (let l of lines) {
     // on the polygon line, then also 'inside'
-    if (l.isInBetween(point)) return false;
+    if (l.isInBetween(point) || calcDist(l.start, point) < 5 || calcDist(l.end, point) < 5) return false;
     if (l.inY(y) && l.x > point.x) ++numIntersects;
   }
   // return false;
@@ -482,7 +486,8 @@ function draw() {
       break;
     }
 
-    return;
+    console.log('asdasd')
+    pop.calcAreaRatios(pop.best, 1);
   }
   for (let i=0; i< 100; ++i)
     pop.step();
@@ -502,8 +507,10 @@ function draw() {
   // }
   // console.log(b.area);
 
-  for (let p of points){
+  for (let i in points){
+    let p = points[i];
     ellipse(p.x, p.y, 20)
+    text(ratios[i], p.x+5, p.y);
   }
 
   // console.log(validSplit(verts, 0));
@@ -521,6 +528,7 @@ function findPolygonLinesAroundPoints(lines){
     [255,0,255,100]
   ]
   let colI = 0;
+  let allLines = [];
     for (let p of points){
       // up
       const l1 = new Line(p.x, p.y, p.x, -10000);
@@ -556,7 +564,7 @@ function findPolygonLinesAroundPoints(lines){
             minDist = d;
           }
         }
-        console.log(i, minIn);
+        // console.log(i, minIn);
         polyBoundaries.push(intLines[i][minIn]);
         // if (i == 2){
         // stroke(cols[colI2++])
@@ -564,16 +572,19 @@ function findPolygonLinesAroundPoints(lines){
         // ls[i].draw();
         // }
       }
-      stroke(cols[colI++]);
-      console.log(polyBoundaries);
+      // stroke(cols[colI++]);
+      // console.log(polyBoundaries);
 
-      for (let l of polyBoundaries){
-        l.draw();
-      }
-      noLoop();
+      // for (let l of polyBoundaries){
+        // l.draw();
+      // }
+      // noLoop();
+      allLines.push(polyBoundaries);
       // break;  
 
     }
+
+    return allLines;
 }
 
 function drawPolygons() {

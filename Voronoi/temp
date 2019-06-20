@@ -1132,3 +1132,119 @@ function drawPolygons() {
     line(l.x, l.y, l.ex, l.ey);
   }
 }
+
+
+
+
+let vs = elem.positions.slice();
+    vs = orderVertices(vs);
+    let areas = [];
+    for (let i = 0; i < vs.length; ++i) {
+      const j = (i + 1) % vs.length;
+      let l1 = null,
+        l2 = null;
+      for (let l of elem.lines) {
+        if (l.end.x == vs[i].x && l.end.y == vs[i].y) l1 = l;
+        if (l.end.x == vs[j].x && l.end.y == vs[j].y) l2 = l;
+      }
+      if (!l1 || !l2) {
+        console.log("NOT");
+        noLoop();
+        return;
+      }
+      // yBound is one that is furthest away from point, and everythin in direction up to point. Similarly for x
+      const xBound = l2.end.x;
+      const yBound = l1.end.y;
+      // console.log(xBound, l2.end.x);
+      const less = (a, b) => a < b;
+      const greater = (a, b) => a >= b;
+      let xFunc = greater;
+      if (l1.end.x <= l2.end.x) xFunc = less;
+      let yFunc = less;
+      // console.log(xBound, l2.end.x);
+      if (l2.end.y < l1.end.y) yFunc = greater;
+      // console.log("xx", xBound, yBound, l2.end.x);
+
+      // console.log(xFunc, yFunc)
+      const polyVerts = getLineElemVerts(xBound, yBound, xFunc, yFunc);
+      // noLoop();
+      polyVerts.push(l1.end, l2.end, LEFT_MID, RIGHT_MID);
+      if (log){
+        fill(0,255,0)
+        for (let p of polyVerts){
+          ellipse(p.x,p.y, 30);
+        }
+              stroke(255,0,0);
+      line(xBound, -100, xBound, 100);
+      line(-100, yBound, 100, yBound);
+
+      l1.draw();
+      stroke(0,255,0);
+      l2.draw()
+      }
+      // throw "";
+      areas.push(calcAreaFromVerts(polyVerts));
+    }
+    return areas;
+
+
+    // if (outside(polygonLines, leftMost)){
+      //   const l = new Line(leftMost.x, leftMost.y, center.x, center.y);
+      //   for (let p of polygonLines){
+      //     const ip = p.getIntersectPoint(l);
+      //     if (ip){
+      //       // leftMost;
+      //       for (let i in lines){
+      //         let li  =lines[i];
+      //         if (li.end.x == leftMost.x && li.end.y == leftMost.y){
+      //           lines[i] = new Line(center.x, center.y, ip.x, ip.y);
+      //         }
+      //       }
+      //       leftMost = ip;
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // if (outside(polygonLines, rightMost)){
+      //   const l = new Line(rightMost.x, rightMost.y, center.x, center.y);
+      //   for (let p of polygonLines){
+      //     const ip = p.getIntersectPoint(l);
+      //     if (ip){
+      //       for (let i in lines){
+      //         let li = lines[i];
+      //         if (li.end.x == rightMost.x && li.end.y == rightMost.y){
+      //           // li.end = ip;
+      //           lines[i] = new Line(center.x, center.y, ip.x, ip.y);
+      //         }
+      //       }
+      //       rightMost = ip;
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // let leftLine = new Line(leftMost.x, leftMost.y, -100000, leftMost.y); 
+      // let rightLine = new Line(rightMost.x, rightMost.y, 100000, rightMost.y); 
+      // // get intersection
+      // let doneL = false, doneR = false;
+      // for (let pl of polygonLines){
+      //   if (!doneL){
+      //   const intpl  =pl.getIntersectPoint(leftLine);
+      //   if (intpl){
+      //     doneL = true;
+      //       leftLine.ex = intpl.x
+      //   }
+      //   }
+      //   if (!doneR){
+      //     const intpr  =pl.getIntersectPoint(rightLine);
+      //     if (intpr){
+      //       doneR = true;
+      //         rightLine.ex = intpr.x
+      //     }
+      //     }
+      // }
+
+      // lines.push(leftLine, rightLine);
+      // lines.push(new Line(leftMost.x, leftMost.y, LEFT_MID.copy().x, LEFT_MID.copy().y), 
+      // new Line(rightMost.x, rightMost.y, RIGHT_MID.copy().x, RIGHT_MID.copy().y))
