@@ -15,9 +15,6 @@ class Line {
 
     this.minY = min(y, ey);
     this.maxY = max(y, ey);
-
-    this.start = createVector(x, y);
-    this.end = createVector(ex, ey);
   }
 
   inX(x) {
@@ -46,10 +43,9 @@ class Line {
     }
     if (this.dx == 0) {
       const otherY = other.m * this.x + other.c;
-      if (this.inY(otherY) && other.inX(this.x)) {
+      if (this.inY(otherY)) {
         return createVector(this.x, otherY);
       }
-      return null;
     } else if (other.dx == 0) {
       return other.getIntersectPoint(this);
     } else {
@@ -108,14 +104,29 @@ let bestLinesSoFar = null;
 let bestPercLines = 0;
 let pop;
 let mainArea;
-let  stop = false;
-let LEFT_CORNER, RIGHT_CORNER, LEFT_B, RIGHT_B, CENTER, LEFT_MID, RIGHT_MID;
+let LEFT_CORNER, RIGHT_CORNER, LEFT_B, RIGHT_B, CENTER;
 
-function validSplit(lines){
+function validSplit(vertices, point=null){
   // todo
   // loop through all points & see if there is line between
-  // const lines = getLines(vertices);
+  const lines = getLines(vertices);
   for (let i=0; i< points.length; ++i){
+    if (point !== null){
+      if (point == points[i]) continue;
+      const l = new Line(points[i].x, points[i].y, point.x, point.y);
+      let numIntersects = 0;
+      for (let pl of lines){
+        const p = l.getIntersectPoint(pl);
+        if (p !==null){
+          // isGood = true;
+          // break;
+          ++numIntersects;
+        }
+      }
+      const isGood = numIntersects % 2 == 1;
+      if (!isGood)  return false;
+      continue;
+    }
     for (let j=i+1; j < points.length; ++j){
       let isGood = false;
       let numIntersects = 0;
@@ -374,19 +385,14 @@ function setup() {
     boundaries.push(temp);
   }
 
+  pop = new Population();
 
   LEFT_CORNER = createVector(polygonLines[1].x, polygonLines[1].y);
   RIGHT_CORNER = createVector(polygonLines[0].x, polygonLines[0].y);
   LEFT_B = createVector(polygonLines[2].x, polygonLines[2].y);
   RIGHT_B = createVector(polygonLines[5].x, polygonLines[5].y);
   CENTER = createVector(0,0);
-
-  LEFT_MID = p5.Vector.add(LEFT_CORNER, LEFT_B).div(2);
-  RIGHT_MID = p5.Vector.add(RIGHT_CORNER, RIGHT_B).div(2);
-
   mainArea = calcAreaFromVerts(getPolygonsAsVerts());
-  pop = new Population();
-
 }
 
 function calcDist(p1, p2) {
@@ -465,32 +471,20 @@ function draw() {
   drawPolygons();
   fill(255)
 
-  // ellipse(LEFT_CORNER.x, LEFT_CORNER.y, 20);
-  // ellipse(RIGHT_CORNER.x, RIGHT_CORNER.y, 20)
-  // ellipse(RIGHT_B.x, RIGHT_B.y, 20)
-  // ellipse(LEFT_B.x, LEFT_B.y, 20)
-  if (stop){
-    findPolygonLinesAroundPoints(
-      pop.best.lines
-    )
-    // stroke(0,0,255);
-    for (let l of pop.best.lines){
-      // l.draw()
-    }
-    for (let p of points){
-      ellipse(p.x, p.y, 20)
-      break;
-    }
-
-    return;
-  }
+  ellipse(LEFT_CORNER.x, LEFT_CORNER.y, 20);
+  ellipse(RIGHT_CORNER.x, RIGHT_CORNER.y, 20)
+  ellipse(RIGHT_B.x, RIGHT_B.y, 20)
+  ellipse(LEFT_B.x, LEFT_B.y, 20)
   for (let i=0; i< 100; ++i)
     pop.step();
   const b = pop.best;
   if (b.positions){
     //, LEFT_CORNER, RIGHT_CORNER, LEFT_B, RIGHT_B, CENTER
-    for (let l of b.lines){
-      l.draw()
+    for (let i in b.positions){
+      const lines = getLines(b.positions[i]);
+      for (let l of lines){
+        l.draw();
+      }
     }
   // const verts = orderVertices([...b.positions]);
   // stroke(255, 0, 0)
@@ -508,88 +502,14 @@ function draw() {
 
   // console.log(validSplit(verts, 0));
 }
-if (mouseIsPressed){
-  pop.calcAreaRatios(b, 1);
-}
 }
 
-function findPolygonLinesAroundPoints(lines){
-  cols = [
-    [255,0,0, 100],
-    [0,255,0, 100],
-    [0,0,255,100],
-    [255,0,255,100]
-  ]
-  let colI = 0;
-    for (let p of points){
-      // up
-      const l1 = new Line(p.x, p.y, p.x, -10000);
-      //down
-      const l2 = new Line(p.x, p.y, p.x, 10000);
-      // right
-      const l3 = new Line(p.x, p.y, 10000, p.y);
-      // left
-      const l4 = new Line(p.x, p.y, -10000, p.y);
-
-      const intPoints = [[], [], [], []];
-      const intLines = [[], [], [], []];
-      const ls = [l1, l2, l3, l4];
-      let all = lines.slice().concat(polygonLines);
-      for (let polyLine of all){
-        for (let i=0;i<ls.length; ++i){
-          const intP = ls[i].getIntersectPoint(polyLine);
-          if (intP) {
-            intPoints[i].push(intP);
-            intLines[i].push(polyLine);
-          }
-        }
-      }
-      const polyBoundaries = [];
-      let colI2 = 0;
-      for (let i =0; i< ls.length; ++i){
-        let minDist = 1000000;
-        let minIn = -1;
-        for (let j=0;j<intLines[i].length; ++j){
-          const d = calcDist(p, intPoints[i][j]);
-          if (minIn < 0 || minDist > d){
-            minIn = j;
-            minDist = d;
-          }
-        }
-        console.log(i, minIn);
-        polyBoundaries.push(intLines[i][minIn]);
-        // if (i == 2){
-        // stroke(cols[colI2++])
-        // ellipse(intPoints[i][minIn].x, intPoints[i][minIn].y, 10)
-        // ls[i].draw();
-        // }
-      }
-      stroke(cols[colI++]);
-      console.log(polyBoundaries);
-
-      for (let l of polyBoundaries){
-        l.draw();
-      }
-      noLoop();
-      // break;  
-
-    }
-}
 
 function drawPolygons() {
   for (let l of polygonLines) {
     stroke(255, 255, 255, 100);
     line(l.x, l.y, l.ex, l.ey);
   }
-}
-
-function getLineElemVerts(xBound, yBound, xFunc, yFunc) {
-  let verts = [];
-  let polygon = getPolygonsAsVerts();
-  for (let p of polygon) {
-    if (xFunc(p.x, xBound) && yFunc(p.y, yBound)) verts.push(p);
-  }
-  return verts;
 }
 
 
@@ -602,8 +522,4 @@ function getLines(verts){
     lines.push(new Line(p1.x, p1.y, p2.x, p2.y));
   }
   return lines;
-}
-
-function mousePressed(){
-  stop = true;
 }
