@@ -418,6 +418,7 @@ function getPolygonsAsVerts() {
 
 function orderVertices(vertices) {
   // first find center point
+  if (vertices.length == 0) return vertices;
   let ave = createVector(0, 0);
   for (let v of vertices) {
     ave.add(v);
@@ -486,13 +487,14 @@ function draw() {
       break;
     }
 
-    console.log('asdasd')
+    // console.log('asdasd')
     pop.calcAreaRatios(pop.best, 1);
   }
   for (let i=0; i< 100; ++i)
     pop.step();
   const b = pop.best;
   if (b.positions){
+    pop.calcAreaRatios(b, 1);
     //, LEFT_CORNER, RIGHT_CORNER, LEFT_B, RIGHT_B, CENTER
     for (let l of b.lines){
       l.draw()
@@ -509,7 +511,7 @@ function draw() {
 
   for (let i in points){
     let p = points[i];
-    ellipse(p.x, p.y, 20)
+    // ellipse(p.x, p.y, 20)
     text(ratios[i], p.x+5, p.y);
   }
 
@@ -521,6 +523,7 @@ if (mouseIsPressed){
 }
 
 function findPolygonLinesAroundPoints(lines){
+  // TODO Problem here, we take both endpoints of the line, even though that might cause that one of the vertices are outside the polygon
   cols = [
     [255,0,0, 100],
     [0,255,0, 100],
@@ -564,24 +567,23 @@ function findPolygonLinesAroundPoints(lines){
             minDist = d;
           }
         }
-        // console.log(i, minIn);
         polyBoundaries.push(intLines[i][minIn]);
-        // if (i == 2){
-        // stroke(cols[colI2++])
-        // ellipse(intPoints[i][minIn].x, intPoints[i][minIn].y, 10)
-        // ls[i].draw();
-        // }
       }
-      // stroke(cols[colI++]);
-      // console.log(polyBoundaries);
-
-      // for (let l of polyBoundaries){
-        // l.draw();
-      // }
-      // noLoop();
-      allLines.push(polyBoundaries);
-      // break;  
-
+      // fix outside points.
+      let newBounds = [];
+      for (let i=0; i< polyBoundaries.length; ++ i){
+        const line1 = polyBoundaries[i];
+        let isValid = true;
+        for (let j=0; j< polyBoundaries.length && isValid; ++ j){
+          if (i == j) continue;
+          const p1 = polyBoundaries[j].start;
+          const p2 = polyBoundaries[j].end;
+          if ((line1.isInBetween(p1) || (line1.isInBetween(p2))  && calcDist(p1, line1.start)>5 && calcDist(p2, line1.end > 5))) 
+            isValid = false;
+        }
+        if (isValid) newBounds.push(line1);
+      }
+      allLines.push(newBounds);
     }
 
     return allLines;

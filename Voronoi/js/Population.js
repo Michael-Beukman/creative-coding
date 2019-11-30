@@ -32,16 +32,36 @@ class Population {
     const polyLines = findPolygonLinesAroundPoints(elem.lines);
     const verts = [];
     const areas = [];
+    const cols  =[
+      [255,0,0],
+      [0,255,0],
+      [0,0,255],
+      [255, 255,0],
+      [0, 255, 255],
+      [255,0,  255]
+    ]
+    let i =0;
     for (let group of polyLines){
       let temp=[]
       for (let l of group){
         temp.push(l.start, l.end);
+        if (log && i == 1){
+          fill(color(cols[i]));
+          ellipse(l.start.x, l.start.y, 10)
+          ellipse(l.end.x, l.end.y, 10)
+          l.draw();
+          ellipse(points[i].x, points[i].y, 20);
+        }
       }
+      ++i;  
       verts.push(temp);
       areas.push(calcAreaFromVerts(temp)/mainArea);
     }
 
-    if (log) console.log(areas, 'ae');
+    if (log) {
+
+      console.log(areas, 'ae');
+    }
     return areas;
   }
 
@@ -52,11 +72,11 @@ class Population {
       if (!validSplit(elem.lines)) {
         // console.log('ss')  
         // return -0.4;
-        multi +=0.15;
+        multi +=0.5;
       }
       for (let l of elem.lines) 
       if (outside(polygonLines, l.end) || outside(polygonLines, l.start)) {
-        multi +=0.06;
+        multi +=0.1;
         break;
       }
       // if (outside(polygonLines, elem.center)) return -1;
@@ -69,7 +89,7 @@ class Population {
         elem.areas.push(a);
         fit += abs(a - ratios[i]);
         }
-      return 1 / (fit + 0.01) - multi;
+      return 1 / (fit + 1) - multi;
 
       return 0.001;
     }
@@ -120,6 +140,11 @@ class Population {
       }
     }
 
+    if (arr.length == 0) {
+      this.init();
+      // console.log('p')
+      return this.pos;
+    }
     //   noLoop();
     let newPop = [];
     while (newPop.length < this.pop.length) {
