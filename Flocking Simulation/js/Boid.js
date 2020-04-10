@@ -40,7 +40,7 @@ class Boid {
   doFlock(flock) {
     let alignment = this.align(flock);
     let cohesion = this.cohesion(flock);
-    let separation = this.separation();
+    let separation = this.separation(flock);
     // separation.mult(1.5)
     this.acc.add(separation);
     this.acc.add(alignment);
@@ -74,7 +74,7 @@ class Boid {
     return desired;
   }
 
-  separation() {
+  separation(flock) {
     let { desired, total } = this.generalAverage(flock, ({other, d}) => {
         let diff = p5.Vector.sub(this.pos, other.pos);
         if (d!==0)diff.div(d);
