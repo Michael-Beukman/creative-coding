@@ -7,7 +7,7 @@ class Ball {
    */
   constructor(pos, vel = null, acc = null, r = 40, id = null) {
     this.pos = pos;
-    this.vel = vel || p5.Vector.random2D().mult(1000); //createVector();
+    this.vel = vel || p5.Vector.random2D().mult(0); //createVector();
     this.acc = acc || createVector();
     this.r = r;
     this.col = [255, 255, 255];

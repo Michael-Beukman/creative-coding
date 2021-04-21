@@ -47,6 +47,15 @@ class Balls{
                     other.pos.add(twixt)
                     
                 }
+
+                const diff = p5.Vector.sub(b.pos, other.pos);
+                const dist = diff.mag();
+                diff.normalize();
+                if (dist < this.attractionRadius && dist > 100){
+                    // console.log("ree")
+                    b.acc.sub(p5.Vector.mult(diff, 10000/(dist*dist)))
+                    other.acc.add(p5.Vector.mult(diff, 10000/(dist*dist)))
+                }
             }
         }
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+      
+        <link rel="shortcut icon" href="https://www.8onitsside.com/favicon.png" type="image/png">
+        <link rel="stylesheet" type="text/css" href="styles/styles.css" media="screen" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/1.0.1/trianglify.min.js"></script>
+        <script src='https://www.8onitsside.com/bgColor.js'></script>
+        <script>
+          (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+              var pattern = Trianglify({
+                cell_size: getCellSize(),
+                variance: getVariance(),
+                seed: getSeed(),
+                //x_colors: ['F1C9FE', '#F1C9FE', '#F1C9FE'],
+                x_colors: getBgColorsX(),
+                y_colors: getBgColorsY(),
+                color_space: 'rgb',
+                color_function: false,
+                width: window.innerWidth,
+                //height: window.innerHeight*0.93,
+                //height: document.getElementById('bodyDiv').offsetHeight,
+                height: document.body.offsetHeight,
+                color_function: null,
+              });
+              window.onresize = function() {
+                location.reload();
+              }
+              window.resize = function() {
+                location.reload();
+              }
+              document.body.style.background = 'url(' + pattern.canvas().toDataURL() + ')';
+            });
+          }());
+        </script>
+      </head>
+      
+      
+<body style="height:100vh">
+    <div style='text-align:center; height:100%' >
+        <div style='display:inline-block;height:100%'>
+    <ul>
+       <li> <a href="https://8onitsside.com/creative-coding/Fourier/FourierSeries">Fourier1</a></li>
+       <li><a href="https://8onitsside.com/creative-coding/Fourier/FourierSeriesV2">Fourier2</a></li>
+        <li><a href="https://8onitsside.com/creative-coding/Fourier/FourierSeriesV3">Fourier3</a></li>
+        <li><a href="https://8onitsside.com/creative-coding/Fourier/FourierSeriesV4">Fourier4</a></li>
+    </ul>
+</div>
+</div>
+</body>
+</html>
