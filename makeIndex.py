@@ -1,35 +1,45 @@
-import os
-url="https://8onitsside.com/creative-coding/{}"
-name1='{0}'
-name2='{1}'
-s =  \
-f"""
-<tr>
-          <td id="indexTableData">
-            <a href="{url.format('{0}')}" target="_blank">
-              <div class='fullTdDiv'><span class='paddingSpan'>{name1}</span></div>
-            </a>
-          </td>
-          <td id="indexTableData">
-            <a href="{url.format('{1}')}" target="_blank">
-              <div class='fullTdDiv'><span class='paddingSpan'>{name2}</span></div>
-            </a>
-          </td>
-        </tr>
-"""
+names = {
+    '4d': 'Rotating Tesseract 4d cube',
+    'Backgrounds/FirstTry': 'Funny screensaver consisting of bouncing circles',
+    'BarnsleyFern': 'Barnsley Fern',
+    'BrownianSnowflake/v2': 'Creating a snowflake',
+    'CPPN': 'Playing around with colours using a compositional pattern producing network',
+    'ChaosGame': 'Interesting shapes using randomness',
+    'ChaosEquations': 'Lorentz attractor',
+    'CircleDrawings': 'Morphing circles. Very cool',
+    'DifferentialEquations': 'Vector Fields',
+    'Elm/squares': 'Moving squares',
+    'FlockingSimulation': 'Flocking simulation based on boids',
+    'Fourier/FourierSeries': 'Drawing periodic functions',
+    'Fourier/FourierSeriesV2': 'Approximating other functions',
+    'Fourier/FourierSeriesV3': 'Approximating other functions, with a cool circle graphic',
+    'Fourier/FourierSeriesV4': 'Smoother version of the above',
+    'GeneticAlgorithms': 'Using a genetic algorithm to make agents find a goal location.',
+    'Koch-Snowflake': 'Building the Koch snowflake. Click to see it change',
+    'MultiplicationModN': 'Intricate pattern',
+    'SinCos': 'Rotating lines',
+    'Toothpicks/V1': 'Toothpick simulation',
+    'Toothpicks/v2': 'Hexagonal toothpicks',
+    'Trippy': 'Fun pattern / screensaver',
+    'Voronoi': 'Weighted Voronoi segmentation',
+    'attractions': 'Attractor fields. Click to place more points',
+    'balls': 'Select and shoot balls at each other',
+    'chess': "Silly chess game. Haven't implemented all the rules yet",
+    'ellipse': 'Silly',
+    'flowFields': 'Animated Flow Fields',
+    'heatEquation': 'Simulating the 1D heat equation',
+    'mandlebrot': 'Mandlebrot and Julia sets',
+    'maurerRose': 'Maurer Rose',
+    'patterns': 'Triangle Picture',
+    'raycasting': 'Raycasting First person movement (like DOOM)',
+    'reflections': 'Line of sight and reflection simulation',
+    'reflections2': 'Line of sight and first person reflections',
+    'steeringBehaviours': 'Agent following the mouse',
+    'vectorFields': 'Vector Fields',
+    'fireworks': "Fireworks"
+}
+ans = ''
+for key, value in names.items():
+    ans += f'- {key}: [Demo](https://8onitsside.com/cc/{key}/), [Code](https://github.com/Michael-Beukman/creative-coding/{key})\n    - {value}\n'
 
-
-ignore = ['reflections.bak', 'README.md', 'index.html', 'makeIndex.py', '.git', '.DS_Store']
-tmp = []
-print("<!-- BEGIN -->")
-for i in os.listdir():
-    if i in ignore: continue
-    tmp.append(i)
-    if len(tmp) == 2:
-        print(s.format(*tmp))
-        tmp = []
-if (len(tmp)):
-    if len(tmp) == 1:
-        tmp = [tmp[0], tmp[0]]
-    print(s.format(*tmp))
-print("<!-- END -->")
+print(ans)

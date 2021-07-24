@@ -1,0 +1,48 @@
+.
+├── 4d
+├── Backgrounds
+├── BarnsleyFern
+├── Brownian\ Snowflake
+├── CPPN
+├── Chaos\ Game
+├── ChaosEquations
+├── CircleDrawings
+├── DifferentialEquations
+├── Elm
+├── Flocking\ Simulation
+├── Fourier
+├── GeneticAlgorithms
+├── Koch-Snowflake
+├── MultiplicationModN
+├── ProceduralGeneration
+├── ProcessingLearn
+├── README.md
+├── SinCos
+├── Toothpicks
+├── Trippy
+├── Voronoi
+├── attractions
+├── balls
+├── besselFunctions
+├── chess
+├── ellipse
+├── ellipticCurves
+├── environment
+├── equations
+├── flowFields
+├── heatEquation
+├── index.html
+├── makeIndex.py
+├── mandlebrot
+├── maurerRose
+├── patterns
+├── raycasting
+├── reflections
+├── reflections.bak
+├── steeringBehaviours
+├── surfacePlots
+├── tags
+├── temp.txt
+└── vectorFields
+
+40 directories, 5 files
