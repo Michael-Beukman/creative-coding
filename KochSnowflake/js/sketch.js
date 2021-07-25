@@ -31,7 +31,7 @@ function reset() {
   background(0);
   
   let w = width/4;
-  let h = 2.5*height/4;
+  let h = 3*height/4;
   let l1 = new Line(0,h, w*2,h);
   let l2 = new Line(0,h, w, h - 2*w * sin(PI/3), 1);
   let l3 = new Line(w*2,h, w, h - 2*w * sin(PI/3));
