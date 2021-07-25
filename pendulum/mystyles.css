@@ -1,0 +1,91 @@
+body{
+  margin: 0;
+  background: rgba(253,185,200,0.3);
+
+  background: repeating-linear-gradient(
+45deg,
+rgba(253,185,200,0.2),
+rgba(253,185,200,0.1 ),
+rgba(196, 224, 229,0.1) 20px
+);
+}
+.fullscreenDiv {
+  background-color: #e8e8e8;
+  width: 100%;
+  height: auto;
+  bottom: 0px;
+  top: 0px;
+  left: 0;
+  position: absolute;
+}
+
+h1 {
+  color: #ffffff;
+  font-family: 'Raleway',sans-serif;
+  font-size: 2em;
+  /*margin: 0 0 24px;*/
+  /*text-shadow: 1px 1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, -1px -1px 0 #333;*/
+}
+
+
+.center {
+  text-align: center;
+  position: absolute;
+  width:100%;
+  top: -5vh;
+}
+
+.outTable{
+    align:center;
+    padding: 10px;
+    border-spacing: 20px;
+    border-collapse: separate;
+    font-size: 40;
+}
+
+.canvas
+{
+  align:center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+.canvasDiv
+{
+  text-align: center;
+  height: 100%;
+  float: right;
+  width:75%;
+}
+#inpDiv{
+  width:25%;
+  height: 100%;
+  margin: 0;
+  float: left;
+  color: black;
+  overflow: scroll;
+}
+.floatDiv{
+  overflow: hidden;
+  width:99%;
+  margin: auto;
+  height:100%;
+}
+#btnDiv{
+  position: absolute;
+  bottom: 3%;
+  width:20%;
+  /* margin-left: 2.5%; */
+  height:10%;
+}
+#btnStart{
+    background: lime;
+    width:100%;
+    height: 100%;
+    font-size:5vh;
+}
+
+  @media only screen and (max-width: 400px) { h1 { font-size: 0.75em; } }
+  @media only screen and (max-width: 800px) { h1 { font-size: 2em; } }
+  @media only screen and (max-width: 400px) { h2 { font-size: 0.75em; } }
+  @media only screen and (max-width: 800px) { h2 { font-size: 2em; } }

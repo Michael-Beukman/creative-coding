@@ -1,0 +1,38 @@
+<html>
+<title>Graphing</title>
+<head>
+<link rel="stylesheet" type="text/css" href="mystyles.css" media="screen" />
+</head>
+<body>
+
+    <div id = 'bodyDiv'>
+      <form id = 'eqForm'>
+        <label id = 'y'>y = </label>
+        <input type = 'text' id = 'eq' value = 'x^2' />&emsp;
+        <input type = 'submit' value = 'Draw' id = 'btnDraw'/>&emsp;
+        <input type = 'button' value = 'Clear' id = 'btnClear'/>&emsp;
+        &emsp;
+        <div id = 'sFloatDiv'>
+
+        <div class = 'sDiv' id = 'polarDiv'>Polar Graph: <input type = 'checkbox' id = 'isPolar' />&emsp;</div>
+        <div class = 'sDiv' id = 'negDiv'>Allow Negative: <input type = 'checkbox' id = 'AllowNegative'/>&emsp;</div>
+        <div class = 'sDiv' >Red: 0<input type = 'range' min = "0" max = "255" id = 'sRed' value = '255' step = '1' />255&emsp;</div>
+        <div class = 'sDiv'>Green: 0<input type = 'range' min = "0" max = "255" id = 'sGreen' value = '0'/>255&emsp;</div>
+        <div class = 'sDiv'>Blue: 0<input type = 'range' min = "0" max = "255" id = 'sBlue' value = '255'/>255&emsp;</div>
+        <div class = 'sDiv' id = 'scaleDiv'>Scale: 1<input type = 'range' min = "1" max = "100" id = 'sScale' value = '100'/>100&emsp;</div>
+
+      </div>
+
+      </form>
+    <div id="canvasDiv", class="canvasDiv">
+    </div>
+</div>
+<!--script src = 'graphing.js'></script!-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/1.0.1/trianglify.min.js"></script>
+<script src = 'https://www.8onitsside.com/bgColor.js'></script>
+<script src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js'></script>
+<script src = 'setup.js'></script>
+<script src = 'test.js'></script>
+</body>
+
+</html>
