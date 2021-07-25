@@ -1,0 +1,33 @@
+<title>Cool Sets</title>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="mystyles.css" media="screen" />
+  <link rel="shortcut icon" href="https://www.8onitsside.com/favicon.png" type="image/png">
+</head>
+
+<body>
+
+  <div id='bodyDiv'>
+    <div class = 'divPageHeader'>Discover the <a href='https://en.wikipedia.org/wiki/Mandelbrot_set'>Mandlebrot</a> and <a href='https://en.wikipedia.org/wiki/Julia_set'>Julia</a> sets</div>
+    <div id='divInputs'>
+      <select id='selSet' style= 'color:black'>
+          <option id='mandleBrot'>Mandlebrot Set</option>
+          <option id='julia'>Julia Set</option>
+      </select> Range: <input type='range' id='inpRange' min='1' max='5' value='2' />
+
+      <span id='sOptional'> Real part: <input type='number' id='inpRC' min = '-1' max='1' value='-0.8' step='0.01'/>
+      Imaginary Part: <input type='number' id='inpIC' min='-1' max = '1' value= '0.156' step='0.01'/>
+      Change With mouse position: <input type='checkbox' id='inpMouse'/></span>
+    </div>
+    <div id="canvasDiv" , class="canvasDiv">
+    </div>
+
+  </div>
+
+</body>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js'></script>
+
+<script src='sketch.js'></script>
+
+</html>

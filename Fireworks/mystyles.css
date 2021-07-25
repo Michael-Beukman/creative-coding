@@ -1,0 +1,26 @@
+.ruleHeader
+{
+
+  height: 5%;
+  text-align: center;
+  width:20%;
+  background-color: pink;
+  float: left;
+
+}
+.canvas
+{
+  align:center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+.canvasDiv
+{
+  text-align: center;
+  height:98vh;
+  width:100%;
+  background-color: rgb(100,100,100);
+
+
+}

@@ -17,7 +17,7 @@ function draw() {
 }
 
 function getVec(x, y){
-    return x;
+    return sin(x);
 }
 
 function drawPoints(){

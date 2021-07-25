@@ -1,0 +1,37 @@
+<head>
+<title>Pendulum!</title>
+
+<link rel="stylesheet" type="text/css" href="mystyles.css" media="screen" />
+<link rel="shortcut icon" href="https://8onitsside.com/favicon.png" type="image/png">
+<!--link rel="stylesheet" type="text/css" href="styles.css" media="screen" /!-->
+</head>
+<body>
+
+  <div id = 'bodyDiv'>
+  <div id ="all", class="floatDiv">
+    <div id='inpDiv'>
+      <h1 style= 'font-size:2em;'>Changes</h1>
+      Mass 1: <br/> 1<input type='range' id = 'iM1' min='1' max='100', value='20'/>100<br/><br/>
+      Mass 2: <br/> 1<input type='range' id = 'iM2' min='1' max='100', value='20' />100<br/><br/>
+      Length 1: <br/> 50<input type='range' id = 'iL1' min='50' max='500', value='100'/>500<br/><br/>
+      Length 2: <br/> 50<input type='range' id = 'iL2' min='50' max='500', value='100'/>500<br/><br/>
+      Angle 1: <br/> -PI/2<input type='range' id = 'iA1' min='-1.5707' max='1.5707', value='0' step='0.1'/>PI/2<br/><br/>
+      Angle 2: <br/> -PI/2<input type='range' id = 'iA2' min='-1.5707' max='1.5707', value='0' step ='0.1'/>PI/2<br/><br/>
+
+    <div id='btnDiv'>
+      <button id ='btnStart'>Start</button>
+    </div>
+
+    </div>
+    <div id="canvasDiv", class="canvasDiv">
+    </div>
+  </div>
+
+
+</div>
+</body>
+
+<script src = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js'></script>
+<script src = 'sketch.js'></script>
+<script src = 'pendulum.js'></script>
+</html>

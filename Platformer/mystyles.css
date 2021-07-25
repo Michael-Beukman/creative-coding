@@ -1,0 +1,20 @@
+body{
+  margin: 0;
+}
+
+.canvas
+{
+  align:center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+.canvasDiv
+{
+  text-align: center;
+  height: 99%;
+}
+  @media only screen and (max-width: 400px) { h1 { font-size: 0.75em; } }
+  @media only screen and (max-width: 800px) { h1 { font-size: 2em; } }
+  @media only screen and (max-width: 400px) { h2 { font-size: 0.75em; } }
+  @media only screen and (max-width: 800px) { h2 { font-size: 2em; } }
