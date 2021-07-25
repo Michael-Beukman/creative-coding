@@ -65,6 +65,6 @@ ans = ''
 for cat, values in names.items():
     ans += f"## {cat.title()}\n"
     for key, value in values.items():
-        ans += f'- {key}: [Demo](https://8onitsside.com/cc/{key}/), [Code](https://github.com/Michael-Beukman/creative-coding/{key})\n    - {value}\n'
+        ans += f'- {key}: [Demo](https://8onitsside.com/cc/{key}/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/{key})\n    - {value}\n'
 
 print(ans)
