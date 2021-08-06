@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gabor Filters</title>
+    <link rel='stylesheet' href='css/styles.css'>
+    <link rel='stylesheet' href='lib/bootstrap-5.0.2-dist/css/bootstrap.min.css'>
+</head>
+
+<body class="h-100">
+    <div class='container-fluid h-100 bg-secondary'>
+        <div class="row d-md-none">
+                <button class="btn btn-primary navbar-expand-sm" data-toggle='collapse' data-target="#options">Options</button>
+        </div>
+        <div class='row h-100'>            
+            <div class="col-sm-2 col-12 collapse d-md-block" id='options'>
+                <h2>Options</h2>
+                <a class='link link-info' href='https://en.wikipedia.org/wiki/Gabor_filter'>Gabor Filters</a>
+                <hr>
+                <form onSubmit = 'return formSubmit();'>
+                    <div class="form-group">
+                        <label for='selectFunction'>ColorGroup</label>
+                            <select id='colourMode' class=" form-select custom-select">
+                                <option selected value="rgb">RGB</option>
+                                <option value='hsb'>HSB</option>
+                          </select>
+                    </div>
+                    <div class="form-group">
+                        <label for='inpSpeed'>Speed</label>
+                        <input step="0.1" type='number' id='inpSpeed' value="0.1" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for='inpSigma'>Sigma</label>
+                        <input step="0.1" type='number' id='inpSigma' value="30" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for='inpOmega'>Omega</label>
+                        <input step="0.1" type='number' id='inpOmega' value="0.1" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for='inpLambda'>Lambda</label>
+                        <input step="0.1" type='number' id='inpLambda' value="0.1" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for='inpTiles'>Tiles</label>
+                        <input step="1" type='number' id='inpTiles' value="51" class="form-control">
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="inpMoving">
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Moving
+                          </label>
+                    </div>
+
+                    <button class="btn btn-primary" id='btnChoose'>Change options</button>
+                </form>
+        </div>
+            <div id='canvasDiv' class="col-sm-10 col-12 h-100">
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+    <script src="lib/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script src='lib/p5/p5.min.js'></script>
+    <script src='js/sketch.js'></script>
+    <script src='js/index.js'></script>
+</body>
+
+</html>

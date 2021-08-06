@@ -44,6 +44,8 @@ Many of these projects are based on some mathematical process or equation, inter
     - Animated Flow Fields
 - KochSnowflake: [Demo](https://8onitsside.com/cc/KochSnowflake/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/KochSnowflake)
     - Building the Koch snowflake. Click to see it change
+- Gabor Filters: [Demo](https://8onitsside.com/cc/GaborFilters/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/GaborFilters)
+    - Gabor Filters
 - MultiplicationModN: [Demo](https://8onitsside.com/cc/MultiplicationModN/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/MultiplicationModN)
     - Intricate pattern
 - SinCos: [Demo](https://8onitsside.com/cc/SinCos/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/SinCos)
