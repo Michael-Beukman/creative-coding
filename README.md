@@ -9,6 +9,7 @@ Many of these projects are based on some mathematical process or equation, inter
 
 # Projects:
 ## Highlights
+- Finite Automata: [Demo](https://8onitsside.com/cc/finite_automata/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/finite_automata)
 - CircleDrawings: [Demo](https://8onitsside.com/cc/CircleDrawings/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/CircleDrawings)
     - Morphing circles. Very cool
 - Fireworks: [Demo](https://8onitsside.com/cc/Fireworks/), [Code](https://github.com/Michael-Beukman/creative-coding/tree/master/Fireworks)
